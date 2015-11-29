@@ -32,7 +32,6 @@ public class XRecyclerView extends RecyclerView {
     private static final int TYPE_HEADER =  -4;
     private static final int TYPE_NORMAL =  0;
     private static final int TYPE_FOOTER =  -3;
-    private int previousTotal = 0;
     private int mPageCount = 0;
 
     public XRecyclerView(Context context) {
@@ -76,10 +75,10 @@ public class XRecyclerView extends RecyclerView {
         mFootViews.add(view);
     }
 
-    public void loadMoreComplete() {
+    public void loadMoreComplete(boolean isNoMore) {
         isLoadingData = false;
         View footView = mFootViews.get(0);
-        if(previousTotal <  getLayoutManager().getItemCount()) {
+        if(!isNoMore) {
             if(footView instanceof  LoadingMoreFooter) {
                 ( (LoadingMoreFooter) footView ).setState(LoadingMoreFooter.STATE_COMPLETE);
             } else{
@@ -93,19 +92,9 @@ public class XRecyclerView extends RecyclerView {
             }
             isnomore = true;
         }
-        previousTotal = getLayoutManager().getItemCount();
     }
 
-    public void noMoreLoading() {
-        isLoadingData = false;
-        View footView = mFootViews.get(0);
-        isnomore = true;
-        if(footView instanceof  LoadingMoreFooter) {
-            ( (LoadingMoreFooter) footView ).setState(LoadingMoreFooter.STATE_NOMORE);
-        }else{
-            footView.setVisibility(View.GONE);
-        }
-    }
+
 
     public void refreshComplete() {
         mRefreshHeader.refreshComplate();
@@ -214,7 +203,6 @@ public class XRecyclerView extends RecyclerView {
                         if (mLoadingListener != null) {
                             mLoadingListener.onRefresh();
                             isnomore = false;
-                            previousTotal = 0;
                         }
                     }
                 }
