@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 public class XRecyclerView extends RecyclerView {
 
-    private static Context mContext;
     private boolean isLoadingData = false;
     private boolean isnomore = false;
     private int mRefreshProgressStyle = ProgressStyle.SysProgress;
@@ -50,14 +49,13 @@ public class XRecyclerView extends RecyclerView {
     }
 
     private void init(Context context) {
-        mContext = context;
         if(pullRefreshEnabled) {
-            ArrowRefreshHeader refreshHeader = new ArrowRefreshHeader(mContext);
+            ArrowRefreshHeader refreshHeader = new ArrowRefreshHeader(context);
             mHeaderViews.add(0, refreshHeader);
             mRefreshHeader = refreshHeader;
             mRefreshHeader.setProgressStyle(mRefreshProgressStyle);
         }
-        LoadingMoreFooter footView = new LoadingMoreFooter(mContext);
+        LoadingMoreFooter footView = new LoadingMoreFooter(context);
         footView.setProgressStyle(mLoadingMoreProgressStyle);
         addFootView(footView);
         mFootViews.get(0).setVisibility(GONE);
@@ -65,7 +63,7 @@ public class XRecyclerView extends RecyclerView {
 
     public void addHeaderView(View view) {
         if (pullRefreshEnabled && !(mHeaderViews.get(0) instanceof ArrowRefreshHeader)) {
-            ArrowRefreshHeader refreshHeader = new ArrowRefreshHeader(mContext);
+            ArrowRefreshHeader refreshHeader = new ArrowRefreshHeader(view.getContext());
             mHeaderViews.add(0, refreshHeader);
             mRefreshHeader = refreshHeader;
             mRefreshHeader.setProgressStyle(mRefreshProgressStyle);
