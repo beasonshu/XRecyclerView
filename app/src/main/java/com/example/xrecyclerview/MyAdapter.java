@@ -40,12 +40,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public ViewHolder(View view){
             super(view);
             mTextView = (TextView) view.findViewById(R.id.text);
-            view.setOnClickListener(new View.OnClickListener() {
+            /*view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(),"test",Toast.LENGTH_SHORT).show();
                 }
-            });
+            });*/
         }
     }
 }
