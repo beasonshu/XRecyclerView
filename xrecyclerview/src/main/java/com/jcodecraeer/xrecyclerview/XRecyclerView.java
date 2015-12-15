@@ -170,9 +170,7 @@ public class XRecyclerView extends RecyclerView {
     public void setLoadingMoreEnabled(boolean enabled) {
         loadingMoreEnabled = enabled;
         if (!enabled) {
-            if (mFootViews.size() > 0) {
-                mFootViews.get(0).setVisibility(GONE);
-            }
+            mFootViews.clear();
         }
     }
 
