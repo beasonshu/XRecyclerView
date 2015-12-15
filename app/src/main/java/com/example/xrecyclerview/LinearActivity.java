@@ -69,9 +69,12 @@ public class LinearActivity extends AppCompatActivity {
                 if (times < 2) {
                     new Handler().postDelayed(new Runnable() {
                         public void run() {
+                            ArrayList<String> items = new ArrayList<String>();
                             for (int i = 0; i < 15; i++) {
-                                listData.add("item" + (i + listData.size()));
+                                items.add("item" + (i + listData.size()));
                             }
+                            listData.addAll(items);
+                            mAdapter.notifyDataSetChanged();
                             mRecyclerView.loadMoreComplete(times != 1);
                         }
                     }, 1000);
@@ -82,7 +85,7 @@ public class LinearActivity extends AppCompatActivity {
 
         listData = new ArrayList<String>();
         for (int i = 0; i < 15; i++) {
-            listData.add("item" + (i + listData.size()));
+            listData.add("item" + i);
         }
         mAdapter = new MyAdapter(listData);
 
