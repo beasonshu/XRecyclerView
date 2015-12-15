@@ -29,6 +29,7 @@ public class LinearActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recyclerview);
         mRecyclerView = (XRecyclerView) this.findViewById(R.id.recyclerview);
+        mRecyclerView.setLoadingMoreEnabled(false);
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.BallRotate);
         mRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
