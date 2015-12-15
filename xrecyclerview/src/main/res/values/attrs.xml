@@ -35,4 +35,19 @@
         <attr name="indicator_color" format="color"/>
     </declare-styleable>
 
+    <declare-styleable name="XRecyclerView">
+        <attr name="android:divider"/>
+        <attr name="android:dividerHeight"/>
+        <attr name="android:listSelector"/>
+        <attr name="XRecyclerStyle">
+            <enum name="list" value="0"></enum>
+            <enum name="grid" value="1"></enum>
+            <enum name="staggered_grid" value="2"></enum>
+        </attr>
+        <attr name="android:orientation"/>
+        <attr name="android:numColumns"/>
+        <attr name="android:verticalSpacing"/>
+        <attr name="android:horizontalSpacing"/>
+    </declare-styleable>
+
 </resources>

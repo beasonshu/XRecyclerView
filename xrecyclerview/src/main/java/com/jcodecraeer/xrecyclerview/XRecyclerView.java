@@ -1,6 +1,7 @@
 package com.jcodecraeer.xrecyclerview;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +37,18 @@ public class XRecyclerView extends RecyclerView {
     private static final int TYPE_NORMAL = 0;
     private static final int TYPE_FOOTER = -3;
 
+    public static final int LIST = 0;
+    public static final int GRID = 1;
+    public static final int STAGGERED_GRID = 2;
+    private int mItemSelectorId;
+    private int mDividerId;
+    private int mDividerHeight;
+    private int mStyle;
+    private int mNumColumns;
+    private int mOrientation;
+    private int mVerticalSpacing;
+    private int mHorizontalSpacing;
+
     public XRecyclerView(Context context) {
         this(context, null);
     }
@@ -46,10 +59,53 @@ public class XRecyclerView extends RecyclerView {
 
     public XRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(context);
+        init(context,attrs);
     }
 
-    private void init(Context context) {
+    private void init(Context context,AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.XRecyclerView);
+            mItemSelectorId = a.getResourceId(R.styleable.XRecyclerView_android_listSelector, 0);
+            mDividerId = a.getResourceId(R.styleable.XRecyclerView_android_divider, 0);
+            mDividerHeight = a.getDimensionPixelSize(R.styleable.XRecyclerView_android_dividerHeight, 1);
+            mStyle = a.getInt(R.styleable.XRecyclerView_XRecyclerStyle, LIST);
+            mNumColumns = a.getInt(R.styleable.XRecyclerView_android_numColumns, 1);
+            mOrientation = a.getInt(R.styleable.XRecyclerView_android_orientation, RecyclerView.VERTICAL);
+            mVerticalSpacing = a.getDimensionPixelSize(R.styleable.XRecyclerView_android_verticalSpacing, 0);
+            mHorizontalSpacing = a.getDimensionPixelSize(R.styleable.XRecyclerView_android_horizontalSpacing, 0);
+
+            a.recycle();
+
+        }
+
+        switch (mStyle) {
+            case LIST:
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                linearLayoutManager.setOrientation(mOrientation);
+                setLayoutManager(linearLayoutManager);
+                if (mOrientation == HORIZONTAL) {
+                    addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL_LIST, mDividerId, mDividerHeight));
+                } else {
+                    addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL_LIST, mDividerId, mDividerHeight));
+                }
+                break;
+            case GRID:
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(context, mNumColumns);
+                gridLayoutManager.setOrientation(mOrientation);
+                setLayoutManager(gridLayoutManager);
+                break;
+            case STAGGERED_GRID:
+                StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(mNumColumns, mOrientation);
+                setLayoutManager(staggeredGridLayoutManager);
+                break;
+            default:
+                break;
+        }
+
+
+        setItemAnimator(null);
+
+
         if (pullRefreshEnabled) {
             ArrowRefreshHeader refreshHeader = new ArrowRefreshHeader(context);
             mHeaderViews.add(0, refreshHeader);
