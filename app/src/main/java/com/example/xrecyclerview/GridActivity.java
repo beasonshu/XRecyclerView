@@ -21,32 +21,30 @@ public class GridActivity extends AppCompatActivity {
     private ArrayList<String> listData;
     private int refreshTime = 0;
     private int times = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recyclerview);
-        mRecyclerView = (XRecyclerView)this.findViewById(R.id.recyclerview);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,3);
-
-        mRecyclerView.setLayoutManager(layoutManager);
+        setContentView(R.layout.activity_grid);
+        mRecyclerView = (XRecyclerView) this.findViewById(R.id.recyclerview);
 
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.BallRotate);
         mRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-        View header =   LayoutInflater.from(this).inflate(R.layout.recyclerview_header, (ViewGroup)findViewById(android.R.id.content),false);
+        View header = LayoutInflater.from(this).inflate(R.layout.recyclerview_header, (ViewGroup) findViewById(android.R.id.content), false);
         mRecyclerView.addHeaderView(header);
 
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                refreshTime ++;
+                refreshTime++;
                 times = 0;
-                new Handler().postDelayed(new Runnable(){
+                new Handler().postDelayed(new Runnable() {
                     public void run() {
 
                         listData.clear();
-                        for(int i = 0; i < 20 ;i++){
+                        for (int i = 0; i < 20; i++) {
                             listData.add("item" + i + "after " + refreshTime + " times of refresh");
                         }
                         mAdapter.notifyDataSetChanged();
@@ -58,25 +56,25 @@ public class GridActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
-                if(times < 2){
-                    new Handler().postDelayed(new Runnable(){
+                if (times < 2) {
+                    new Handler().postDelayed(new Runnable() {
                         public void run() {
 
-                            for(int i = 0; i < 20 ;i++){
-                                listData.add("item" + (i + listData.size()) );
+                            for (int i = 0; i < 20; i++) {
+                                listData.add("item" + (i + listData.size()));
                             }
                             mAdapter.notifyDataSetChanged();
-                            mRecyclerView.loadMoreComplete(times!=1);
+                            mRecyclerView.loadMoreComplete(times != 1);
                         }
                     }, 1000);
                 }
-                times ++;
+                times++;
             }
         });
 
-        listData = new  ArrayList<String>();
-        for(int i = 0; i < 20 ;i++){
-            listData.add("item" + (i + listData.size()) );
+        listData = new ArrayList<String>();
+        for (int i = 0; i < 20; i++) {
+            listData.add("item" + (i + listData.size()));
         }
         mAdapter = new MyAdapter(listData);
 

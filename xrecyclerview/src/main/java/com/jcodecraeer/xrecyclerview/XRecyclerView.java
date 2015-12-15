@@ -202,8 +202,15 @@ public class XRecyclerView extends RecyclerView {
         mWrapAdapter = new WrapAdapter(mHeaderViews, mFootViews, adapter);
         mWrapAdapter.setOnItemClickListener(mOnItemClickListener);
         mWrapAdapter.setOnItemLongClickListener(mOnItemLongClickListener);
-        super.setAdapter(mWrapAdapter);
+        mWrapAdapter.setItemSelectorId(mItemSelectorId);
+        mWrapAdapter.setSpace(mVerticalSpacing, mHorizontalSpacing);
+        if (mStyle == GRID) {
+            GridLayoutManager gridLayoutManager = (GridLayoutManager)getLayoutManager();
+            gridLayoutManager.setSpanSizeLookup(
+                    mWrapAdapter.createSpanSizeLookup(mNumColumns));
+        }
         mAdapter.registerAdapterDataObserver(mDataObserver);
+        super.setAdapter(mWrapAdapter);
     }
 
     @Override
@@ -361,6 +368,10 @@ public class XRecyclerView extends RecyclerView {
         private OnItemClickListener onItemClickListener;
         private OnItemLongClickListener onItemLongClickListener;
 
+        private int itemSelectorId;
+        private int verticalSpacing;
+        private int horizontalSpacing;
+
         public WrapAdapter(ArrayList<View> headerViews, ArrayList<View> footViews, RecyclerView.Adapter adapter) {
             this.adapter = adapter;
             this.mHeaderViews = headerViews;
@@ -424,7 +435,17 @@ public class XRecyclerView extends RecyclerView {
             } else if (viewType == TYPE_FOOTER) {
                 return new SimpleViewHolder(mFootViews.get(0));
             }
-            return adapter.onCreateViewHolder(parent, viewType);
+            RecyclerView.ViewHolder holder = adapter.onCreateViewHolder(parent, viewType);
+            if (verticalSpacing != 0 || horizontalSpacing != 0) {
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)holder.itemView.getLayoutParams();
+                if (params == null) {
+                    params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    holder.itemView.setLayoutParams(params);
+                }
+                params.topMargin = params.bottomMargin = verticalSpacing;
+                params.rightMargin = params.leftMargin = horizontalSpacing;
+            }
+            return holder;
         }
 
         @Override
@@ -458,6 +479,12 @@ public class XRecyclerView extends RecyclerView {
                                 return !isFullSpan(position) && onItemLongClickListener.onItemLongClick(XRecyclerView.this, view, realPosition, getItemId(realPosition));
                             }
                         });
+                    }
+
+                    if (itemSelectorId != 0) {
+                        if (!isFullSpan(position)) {
+                            holder.itemView.setBackgroundResource(itemSelectorId);
+                        }
                     }
                     return;
                 }
@@ -532,6 +559,11 @@ public class XRecyclerView extends RecyclerView {
             return -1;
         }
 
+        public void setSpace(int verticalSpacing, int horizontalSpacing) {
+            this.verticalSpacing = verticalSpacing;
+            this.horizontalSpacing = horizontalSpacing;
+        }
+
         public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
             this.onItemClickListener = onItemClickListener;
         }
@@ -540,10 +572,46 @@ public class XRecyclerView extends RecyclerView {
             this.onItemLongClickListener = onItemLongClickListener;
         }
 
+        public void setItemSelectorId(int itemSelectorId) {
+            this.itemSelectorId = itemSelectorId;
+        }
+
+        public void setVerticalSpacing(int verticalSpacing) {
+            this.verticalSpacing = verticalSpacing;
+        }
+
+        public void setHorizontalSpacing(int horizontalSpacing) {
+            this.horizontalSpacing = horizontalSpacing;
+        }
+
 
         private class SimpleViewHolder extends RecyclerView.ViewHolder {
             public SimpleViewHolder(View itemView) {
                 super(itemView);
+            }
+        }
+
+        public GridLayoutManager.SpanSizeLookup createSpanSizeLookup(int spanCount) {
+            return new CustomSpanSizeLookup(null, spanCount);
+        }
+
+        private final class CustomSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
+            private final GridLayoutManager.SpanSizeLookup source;
+            private final int spanCount;
+
+            private CustomSpanSizeLookup(GridLayoutManager.SpanSizeLookup source, int spanCount) {
+                this.source = source;
+                this.spanCount = spanCount;
+            }
+
+            @Override
+            public int getSpanSize(int position) {
+
+                if (isFullSpan(position)) {
+                    return spanCount;
+                } else {
+                    return 1;
+                }
             }
         }
     }

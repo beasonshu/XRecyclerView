@@ -25,13 +25,8 @@ public class StaggeredGridActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recyclerview);
+        setContentView(R.layout.activity_staggered_grid);
         mRecyclerView = (XRecyclerView)this.findViewById(R.id.recyclerview);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager( 3,
-                StaggeredGridLayoutManager.VERTICAL);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.BallRotate);
         mRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
