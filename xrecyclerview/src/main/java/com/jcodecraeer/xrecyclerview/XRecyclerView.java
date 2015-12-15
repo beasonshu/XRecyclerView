@@ -207,7 +207,7 @@ public class XRecyclerView extends RecyclerView {
             gridLayoutManager.setSpanSizeLookup(
                     mWrapAdapter.createSpanSizeLookup(mNumColumns));
         }
-        mAdapter.registerAdapterDataObserver(mDataObserver);
+//        mAdapter.registerAdapterDataObserver(mDataObserver);
         super.setAdapter(mWrapAdapter);
     }
 
@@ -306,7 +306,7 @@ public class XRecyclerView extends RecyclerView {
 
     }
 
-    private final RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver() {
+    /*private final RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver() {
         @Override
         public void onChanged() {
             mWrapAdapter.notifyDataSetChanged();
@@ -336,7 +336,7 @@ public class XRecyclerView extends RecyclerView {
         public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
             mWrapAdapter.notifyItemMoved(fromPosition, toPosition);
         }
-    };
+    };*/
 
     public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
 
