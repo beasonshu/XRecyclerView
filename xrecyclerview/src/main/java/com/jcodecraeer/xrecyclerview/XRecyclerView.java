@@ -105,6 +105,8 @@ public class XRecyclerView extends RecyclerView {
 
         setItemAnimator(null);
 
+        setOverScrollMode(OVER_SCROLL_NEVER);
+
 
         if (pullRefreshEnabled) {
             ArrowRefreshHeader refreshHeader = new ArrowRefreshHeader(context);
